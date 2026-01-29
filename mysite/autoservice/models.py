@@ -9,6 +9,10 @@ class Service(models.Model):
     def __str__(self):
         return self.name
 
+    # class Meta:
+    #     verbose_name = "Paslauga"
+    #     verbose_name_plural = "Paslaugos"
+
 
 class Car(models.Model):
     make = models.CharField()
