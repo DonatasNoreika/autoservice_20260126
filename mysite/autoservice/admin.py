@@ -4,10 +4,17 @@ from .models import Service, Car, Order, OrderLine
 class OrderLineInLine(admin.TabularInline):
     model = OrderLine
     extra = 0
+    fields = ['service', 'quantity', 'line_sum']
+    readonly_fields = ['line_sum']
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['car', 'date']
     inlines = [OrderLineInLine]
+    readonly_fields = ['date']
+
+    fieldsets = [
+        ('General', {'fields': ('car', 'date')}),
+    ]
 
 
 class CarAdmin(admin.ModelAdmin):
