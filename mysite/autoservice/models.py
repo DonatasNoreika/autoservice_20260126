@@ -29,6 +29,15 @@ class Order(models.Model):
     car = models.ForeignKey(to="Car", on_delete=models.SET_NULL, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
+    STATUS = (
+        ('c', "Confirmed"),
+        ('i', 'In Progress'),
+        ('o', 'Completed'),
+        ('e', 'Canceled'),
+    )
+
+    status = models.CharField(choices=STATUS, default='c')
+
     # def total(self):
     #     result = 0
     #     for line in self.lines.all():
@@ -37,6 +46,7 @@ class Order(models.Model):
 
     def total(self):
         return sum(line.line_sum() for line in self.lines.all())
+
 
     def __str__(self):
         return f"{self.car} ({self.date}) - {self.total()}"
