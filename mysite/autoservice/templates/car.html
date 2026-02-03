@@ -8,4 +8,10 @@
 <p>Valstybinis numeris: {{ car.license_plate }}</p>
 <p>VIN kodas: {{ car.vin_code }}</p>
 <p>Klientas: {{ car.client_name }}</p>
+<h3>Taisymai:</h3>
+{% for order in car.orders.all %}
+<p><a href="{% url 'order' order.pk %}">{{ order.date }}</a></p>
+{% empty %}
+<p>Nėra šio automobilio taisymų</p>
+{% endfor %}
 {% endblock %}
