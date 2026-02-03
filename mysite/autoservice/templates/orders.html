@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Taisymai{% endblock %}
+
+{% block heading %}Taisymai{% endblock %}
+
+{% block content %}
+{% for order in orders %}
+<p><a href="">{{ order }}</a></p>
+{% endfor %}
+{% endblock %}
