@@ -5,6 +5,9 @@
 {% block heading %}Automobilis "{{ car }}"{% endblock %}
 
 {% block content %}
+{% if car.photo %}
+<img class="card-img-top mb-3" style="max-width: 50%" src="{{ car.photo.url }}">
+{% endif %}
 <p>Valstybinis numeris: {{ car.license_plate }}</p>
 <p>VIN kodas: {{ car.vin_code }}</p>
 <p>Klientas: {{ car.client_name }}</p>
