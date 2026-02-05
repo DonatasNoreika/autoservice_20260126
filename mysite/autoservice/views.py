@@ -14,7 +14,7 @@ def index(request):
         "orders_done": Order.objects.filter(status="o").count(),
         'num_visits': num_visits,
     }
-    return render(request, template_name="index.html", context=context)
+    return render(request, template_name="login.html", context=context)
 
 
 def cars(request):
