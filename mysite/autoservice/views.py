@@ -6,10 +6,13 @@ from django.db.models import Q
 
 # Create your views here.
 def index(request):
+    num_visits = request.session.get('num_visits', 1)
+    request.session['num_visits'] = num_visits + 1
     context = {
         "services": Service.objects.count(),
         "cars": Car.objects.count(),
-        "orders_done": Order.objects.filter(status="o").count()
+        "orders_done": Order.objects.filter(status="o").count(),
+        'num_visits': num_visits,
     }
     return render(request, template_name="index.html", context=context)
 
