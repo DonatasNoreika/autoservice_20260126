@@ -34,6 +34,7 @@ class Order(models.Model):
                             blank=True,
                             related_name='orders')
     date = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateTimeField(null=True, blank=True)
     client = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     STATUS = (
