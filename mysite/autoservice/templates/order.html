@@ -7,6 +7,7 @@
 {% block content %}
 <p>Automobilis: {{ order.car }}</p>
 <p>Valstybinis numeris: {{ order.car.license_plate }}</p>
+<p>Klientas: {{ order.client.username }}</p>
 <p>Data: {{ order.date }}</p>
 <p>Būsena: {{ order.get_status_display }}</p>
 <table class="table table-hover">

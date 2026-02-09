@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -33,6 +34,7 @@ class Order(models.Model):
                             blank=True,
                             related_name='orders')
     date = models.DateTimeField(auto_now_add=True)
+    client = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     STATUS = (
         ('c', "Confirmed"),
