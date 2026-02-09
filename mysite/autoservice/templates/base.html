@@ -147,6 +147,12 @@
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
+                            {% if user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'userorders' %}">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Mano taisymai
+                            </a>
+                            {% endif %}
                             <div class="dropdown-divider"></div>
                             {% if user.is_authenticated %}
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
