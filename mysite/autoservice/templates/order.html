@@ -7,7 +7,13 @@
 {% block content %}
 <p>Automobilis: {{ order.car }}</p>
 <p>Valstybinis numeris: {{ order.car.license_plate }}</p>
-<p>Klientas: {{ order.client.username }}</p>
+<p>
+    Klientas:
+    {% if order.client.photo %}
+    <img src="{{ order.client.photo.url }}" class="rounded-circle" style="width: 30px">
+    {% endif %}
+    {{ order.client.username }}
+</p>
 <p>Data: {{ order.date }}</p>
 <p class="{% if order.is_overdue %}text-danger{% endif %}">Terminas: {{ order.deadline }}</p>
 <p>Būsena: {{ order.get_status_display }}</p>
@@ -45,7 +51,12 @@
 </form>
 {% endif %}
 {% for comment in order.comments.all %}
-<p><strong>{{ comment.author }}</strong>, <em>{{ comment.date_created }}</em></p>
+<p>
+    {% if comment.author.photo %}
+    <img src="{{ comment.author.photo.url }}" class="rounded-circle" style="width: 30px">
+    {% endif %}
+    <strong>{{ comment.author }}</strong>, <em>{{ comment.date_created }}</em>
+</p>
 <p>{{ comment.content }}</p>
 <hr>
 {% empty %}
