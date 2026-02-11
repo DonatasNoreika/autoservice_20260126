@@ -1,13 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, reverse
 from django.views.generic.edit import FormMixin
-from .models import Service, Car, Order
+from .models import Service, Car, Order, CustomUser
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from .forms import OrderCommentForm
+from .forms import OrderCommentForm, CustomUserCreateForm
 
 # Create your views here.
 def index(request):
@@ -24,7 +24,7 @@ def index(request):
 
 def cars(request):
     cars = Car.objects.all()
-    paginator = Paginator(cars, per_page=3)
+    paginator = Paginator(cars, per_page=12)
     page_number = request.GET.get('page')
     paged_cars = paginator.get_page(page_number)
     return render(request, template_name="cars.html", context={"cars": paged_cars})
@@ -84,6 +84,17 @@ class UserOrderListView(LoginRequiredMixin, generic.ListView):
         return Order.objects.filter(client=self.request.user)
 
 class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreateForm
     template_name = "signup.html"
     success_url = reverse_lazy("login")
+
+
+class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = CustomUser
+    template_name = "profile.html"
+    success_url = reverse_lazy('profile')
+    fields = ['first_name', 'last_name', 'email', 'photo']
+
+    def get_object(self, queryset = ...):
+        return self.request.user
+

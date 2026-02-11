@@ -2,8 +2,13 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from tinymce.models import HTMLField
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+
+class CustomUser(AbstractUser):
+    photo = models.ImageField(upload_to="profile_pics", null=True, blank=True)
+
+
 class Service(models.Model):
     name = models.CharField()
     price = models.DecimalField(decimal_places=2, max_digits=5)
@@ -37,7 +42,7 @@ class Order(models.Model):
                             related_name='orders')
     date = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField(null=True, blank=True)
-    client = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    client = models.ForeignKey(to="autoservice.CustomUser", on_delete=models.SET_NULL, null=True, blank=True)
 
     STATUS = (
         ('c', "Confirmed"),
@@ -59,7 +64,6 @@ class Order(models.Model):
 
     def total(self):
         return sum(line.line_sum() for line in self.lines.all())
-
 
     def __str__(self):
         return f"{self.car} ({self.date}) - {self.total()}"
@@ -83,11 +87,10 @@ class OrderComment(models.Model):
     order = models.ForeignKey(to="Order",
                               on_delete=models.CASCADE,
                               related_name="comments")
-    author = models.ForeignKey(to=User,
+    author = models.ForeignKey(to="autoservice.CustomUser",
                                on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
 
     class Meta:
         ordering = ['-pk']
-
