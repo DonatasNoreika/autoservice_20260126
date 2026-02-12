@@ -48,15 +48,6 @@ def search(request):
     return render(request, template_name="search.html", context=context)
 
 
-class UserOrderListView(LoginRequiredMixin, generic.ListView):
-    model = Order
-    template_name = "userorders.html"
-    context_object_name = "orders"
-
-    def get_queryset(self):
-        return Order.objects.filter(client=self.request.user)
-
-
 class SignUpView(generic.CreateView):
     form_class = CustomUserCreateForm
     template_name = "signup.html"
@@ -71,6 +62,15 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_object(self, queryset=...):
         return self.request.user
+
+
+class UserOrderListView(LoginRequiredMixin, generic.ListView):
+    model = Order
+    template_name = "userorders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return Order.objects.filter(client=self.request.user)
 
 
 class OrderListView(generic.ListView):
@@ -102,3 +102,16 @@ class OrderDetailView(FormMixin, generic.DetailView):
         form.instance.author = self.request.user
         form.save()
         return super().form_valid(form)
+
+
+class OrderCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Order
+    template_name = "order_form.html"
+    fields = ['car', 'deadline', 'status']
+    success_url = reverse_lazy('userorders')
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        form.save()
+        return super().form_valid(form)
+
