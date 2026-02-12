@@ -17,9 +17,11 @@
 <p>Data: {{ order.date }}</p>
 <p class="{% if order.is_overdue %}text-danger{% endif %}">Terminas: {{ order.deadline }}</p>
 <p>Būsena: {{ order.get_status_display }}</p>
+{% if order.client == user %}
 <div class="mb-2">
     <a href="{% url 'order_update' order.pk %}" class="btn btn-warning">Redaguoti</a>
 </div>
+{% endif %}
 <table class="table table-hover">
     <thead>
     <tr>
