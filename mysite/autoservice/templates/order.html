@@ -22,6 +22,9 @@
     <a href="{% url 'order_update' order.pk %}" class="btn btn-warning btn-sm">Redaguoti</a>
     <a href="{% url 'order_delete' order.pk %}" class="btn btn-danger btn-sm">Ištrinti</a>
 </div>
+<div class="mb-2">
+    <a href="{% url 'orderline_create' order.pk %}" class="btn btn-secondary">Pridėti paslaugą</a>
+</div>
 {% endif %}
 <table class="table table-hover">
     <thead>

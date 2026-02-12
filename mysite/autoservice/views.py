@@ -1,15 +1,22 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        UserPassesTestMixin)
 from django.shortcuts import render, reverse
 from django.views.generic.edit import FormMixin
-from .models import Service, Car, Order, CustomUser
+from .models import (Service,
+                     Car,
+                     Order,
+                     CustomUser,
+                     OrderLine)
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .forms import (OrderCommentForm,
                     CustomUserCreateForm,
                     OrderCreateUpdateForm)
+
+
+# from django.contrib.auth.forms import UserCreationForm
 
 
 # Create your views here.
@@ -124,6 +131,7 @@ class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateVie
     template_name = "order_form.html"
     # fields = ['car', 'deadline', 'status']
     form_class = OrderCreateUpdateForm
+
     # success_url = reverse_lazy('userorders')
 
     def get_success_url(self):
@@ -142,3 +150,19 @@ class OrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteVie
     def test_func(self):
         return self.get_object().client == self.request.user
 
+
+class OrderLineCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = OrderLine
+    template_name = "orderline_form.html"
+    fields = ['service', 'quantity']
+
+    def get_success_url(self):
+        return reverse("order", kwargs={"pk": self.kwargs["order_pk"]})
+
+    def test_func(self):
+        return Order.objects.get(pk=self.kwargs["order_pk"]).client == self.request.user
+
+    def form_valid(self, form):
+        form.instance.order = Order.objects.get(pk=self.kwargs["order_pk"])
+        form.save()
+        return super().form_valid(form)
